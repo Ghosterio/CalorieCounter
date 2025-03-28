@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     setGender,
@@ -26,23 +26,36 @@ const CounterForm = () => {
         weightError,
     } = useSelector((state: RootState) => state.counter);
 
+    // Новый стейт для отслеживания, было ли взаимодействие с полем
+    const [ageTouched, setAgeTouched] = useState(false);
+    const [heightTouched, setHeightTouched] = useState(false);
+    const [weightTouched, setWeightTouched] = useState(false);
+
     useEffect(() => {
         dispatch(validateForm());
     }, [dispatch, age, height, weight]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        const parsedValue = Number(value);
+        let parsedValue = Number(value);
+
+        // Преобразуем значение меньше нуля в 0
+        if (parsedValue < 0) {
+            parsedValue = 0;
+        }
 
         switch (name) {
             case 'age':
                 dispatch(setAge(parsedValue));
+                setAgeTouched(true);
                 break;
             case 'height':
                 dispatch(setHeight(parsedValue));
+                setHeightTouched(true);
                 break;
             case 'weight':
                 dispatch(setWeight(parsedValue));
+                setWeightTouched(true);
                 break;
             default:
                 break;
@@ -65,6 +78,10 @@ const CounterForm = () => {
 
     const handleReset = () => {
         dispatch(resetForm());
+        // Сбрасываем touched состояния
+        setAgeTouched(false);
+        setHeightTouched(false);
+        setWeightTouched(false);
     };
 
     return (
@@ -110,8 +127,9 @@ const CounterForm = () => {
                         name="age"
                         value={age}
                         onChange={handleInputChange}
+                        onBlur={() => setAgeTouched(true)} // Устанавливаем touched при потере фокуса
                     />
-                    {ageError && <span className="form__error">{ageError}</span>}
+                    {ageTouched && ageError && <span className="form__error">{ageError}</span>}
                 </div>
                 <div className="form__group">
                     <label className="form__label h2" htmlFor="height">
@@ -124,8 +142,9 @@ const CounterForm = () => {
                         name="height"
                         value={height}
                         onChange={handleInputChange}
+                        onBlur={() => setHeightTouched(true)} // Устанавливаем touched при потере фокуса
                     />
-                    {heightError && <span className="form__error">{heightError}</span>}
+                    {heightTouched && heightError && <span className="form__error">{heightError}</span>}
                 </div>
                 <div className="form__group">
                     <label className="form__label h2" htmlFor="weight">
@@ -138,8 +157,9 @@ const CounterForm = () => {
                         name="weight"
                         value={weight}
                         onChange={handleInputChange}
+                        onBlur={() => setWeightTouched(true)} // Устанавливаем touched при потере фокуса
                     />
-                    {weightError && <span className="form__error">{weightError}</span>}
+                    {weightTouched && weightError && <span className="form__error">{weightError}</span>}
                 </div>
             </fieldset>
 
