@@ -39,25 +39,34 @@ const counterSlice = createSlice({
         },
         setAge: (state, action: PayloadAction<number>) => {
             state.age = action.payload;
-            state.ageError = '';
-            if (action.payload < 0) {
-                state.age = 0;
-            } else if (action.payload > 150) {
-                state.age = 150;
+
+            if (action.payload === 0) {
+                state.ageError = 'Возраст не может быть равен 0';
+            }
+            else if (action.payload > 150) {
+                state.ageError = 'Возраст не может быть больше 150';
+            } else {
+                state.ageError = '';
             }
         },
         setHeight: (state, action: PayloadAction<number>) => {
+
             state.height = action.payload;
-            state.heightError = '';
-            if (action.payload < 0) {
-                state.height = 0;
+
+            if (action.payload === 0) {
+                state.heightError = 'Рост не может быть равен 0';
+            } else {
+                state.heightError = '';
             }
         },
         setWeight: (state, action: PayloadAction<number>) => {
+
             state.weight = action.payload;
-            state.weightError = '';
-            if (action.payload < 0) {
-                state.weight = 0;
+
+            if (action.payload === 0) {
+                state.weightError = 'Вес не может быть равен 0';
+            } else {
+                state.weightError = '';
             }
         },
         setActivity: (state, action: PayloadAction<'min' | 'low' | 'mid' | 'high' | 'very-high'>) => {
@@ -100,34 +109,7 @@ const counterSlice = createSlice({
             return { ...initialState };
         },
         validateForm: (state) => {
-            state.isFormValid = true;
-            if (state.age === null || state.age === undefined || state.age < 0 || state.age > 150) {
-                state.isFormValid = false;
-            }
-            if (state.height === null || state.height === undefined || state.height < 0) {
-                state.isFormValid = false;
-            }
-            if (state.weight === null || state.weight === undefined || state.weight < 0) {
-                state.isFormValid = false;
-            }
-
-            state.ageError = '';
-            if (state.age === null || state.age === undefined || state.age < 0 || state.age > 150) {
-                state.ageError = 'Возраст должен быть от 0 до 150 лет';
-                state.isFormValid = false;
-            }
-
-            state.heightError = '';
-            if (state.height === null || state.height === undefined || state.height < 0) {
-                state.heightError = 'Рост не может быть отрицательным';
-                state.isFormValid = false;
-            }
-
-            state.weightError = '';
-            if (state.weight === null || state.weight === undefined || state.weight < 0) {
-                state.weightError = 'Вес не может быть отрицательным';
-                state.isFormValid = false;
-            }
+            state.isFormValid = !(state.age === 0 || state.height === 0 || state.weight === 0 || !!state.ageError || !!state.heightError || !!state.weightError);
         }
     },
 });
