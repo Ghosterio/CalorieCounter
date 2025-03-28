@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "module": "esnext", // Or "commonjs"
+    "moduleResolution": "node",
+    "esModuleInterop": true, // Important for many libraries
+    "jsx": "preserve", // If you're using JSX
+    "baseUrl": "./", // Make sure this is correct
+    "paths": {
+      "*": [
+        "./src/*"
+      ] // Adjust if your source is in a different directory
+    },
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
+  },
+  "include": [
+    "./src/**/*",
+    ".next/types/**/*.ts"
+  ], // Adjust to include your source files
+  "exclude": [
+    "node_modules"
+  ]
+}
